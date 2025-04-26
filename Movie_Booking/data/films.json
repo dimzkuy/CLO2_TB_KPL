@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "judul": "Avengers: Endgame",
+        "jadwal": ["12:00", "15:00", "18:00"]
+    },
+    {
+        "id": 2,
+        "judul": "The Batman",
+        "jadwal": ["13:00", "16:00", "19:00"]
+    },
+    {
+        "id": 3,
+        "judul": "Spider-Man: No Way Home",
+        "jadwal": ["14:00", "17:00", "20:00"]
+    },
+    {
+        "id": 4,
+        "judul": "Fast and Furious 9",
+        "jadwal": ["11:00", "14:00", "17:00"]
+    },
+    {
+        "id": 5,
+        "judul": "Doctor Strange in the Multiverse of Madness",
+        "jadwal": ["10:00", "13:00", "16:00"]
+    }
+]

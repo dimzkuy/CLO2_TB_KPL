@@ -44,7 +44,7 @@ if __name__ == '__main__':
         elif choice == '2':
             user = masuk()
         elif choice == '3':
-            tampilkan_film()
+            booking.tampilkan_films()
         elif choice == '0':
             print("👋 Keluar dari sistem. Sampai jumpa!")
             break
