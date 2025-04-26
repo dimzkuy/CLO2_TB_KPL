@@ -44,6 +44,7 @@ if __name__ == '__main__':
         choice = input("Pilih menu: ")
         if choice == '1':
             daftar()
+            user = masuk()
         elif choice == '2':
             user = masuk()
         if user:

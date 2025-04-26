@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "username": "upin",
+        "film": "Spider-Man: No Way Home",
+        "jadwal": "17:00",
+        "kursi": [
+            "A2"
+        ]
+    },
+    {
+        "username": "upin",
+        "film": "Fast and Furious 9",
+        "jadwal": "17:00",
+        "kursi": [
+            "A2"
+        ]
+    }
+]
