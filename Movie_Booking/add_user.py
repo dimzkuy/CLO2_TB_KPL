@@ -2,7 +2,7 @@ import json
 import hashlib
 import os
 
-USERS_FILE = 'data/users.json'
+USERS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'users.json')
 
 def load_users():
     if not os.path.exists(USERS_FILE):
