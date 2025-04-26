@@ -39,34 +39,35 @@ def tampilkan_film():
             print(f"- {f['id']}: {f['title']} ({f['schedule']})")
 
 if __name__ == '__main__':
+    user = None  
     while True:
         menu()
         choice = input("Pilih menu: ")
+        
         if choice == '1':
             daftar()
-            user = masuk()
+            user = None
+            continue  
         elif choice == '2':
             user = masuk()
-        if user:
-            judul_film, jadwal = booking.pilih_film_dan_jadwal()
-            if judul_film and jadwal:
-                kursi_terpilih = booking.pilih_kursi()
-                if kursi_terpilih:
-                    harga_per_kursi = 50000  # contoh harga tetap Rp50.000
-                    if booking.proses_pembayaran(harga_per_kursi, len(kursi_terpilih)):
-                        booking.simpan_transaksi(user, judul_film, jadwal, kursi_terpilih)
         elif choice == '3':
             booking.tampilkan_films()
-        elif choice == '4':  # ✅ Tambahkan pilihan 4
-            film, jadwal = booking.pilih_film_dan_jadwal()
-            if film and jadwal:
-                print(f"✅ Siap untuk lanjut pilih kursi di film '{film}' jam {jadwal}.")
-        elif choice == '5':
-            kursi_terpilih = booking.pilih_kursi()
-            if kursi_terpilih:
-                print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
+        elif choice == '4':
+            if user:  # Harus login dulu
+                film, jadwal = booking.pilih_film_dan_jadwal()
+                if film and jadwal:
+                    print(f"✅ Siap untuk lanjut pilih kursi di film '{film}' jam {jadwal}.")
             else:
-                print("❌ Anda belum memilih kursi.")
+                print("❌ Anda harus login terlebih dahulu.")
+        elif choice == '5':
+            if user:  # Harus login dulu
+                kursi_terpilih = booking.pilih_kursi()
+                if kursi_terpilih:
+                    print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
+                else:
+                    print("❌ Anda belum memilih kursi.")
+            else:
+                print("❌ Anda harus login terlebih dahulu.")
         elif choice == '0':
             print("👋 Keluar dari sistem. Sampai jumpa!")
             break
