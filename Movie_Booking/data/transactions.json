@@ -41,5 +41,21 @@
             "A1",
             "A2"
         ]
+    },
+    {
+        "username": "ardy",
+        "film": "Fast and Furious 9",
+        "jadwal": "14:00",
+        "kursi": [
+            "C1"
+        ]
+    },
+    {
+        "username": "ardy",
+        "film": "Fast and Furious 9",
+        "jadwal": "11:00",
+        "kursi": [
+            "A1"
+        ]
     }
 ]

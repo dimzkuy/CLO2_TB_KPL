@@ -10,7 +10,7 @@ def menu():
     print("3. Tampilkan Film")
     print("4. Pilih Film dan Jadwal")
     print("5. Pilih Kursi")
-    print("6. Export Transaksi (csv)")  # Fitur baru
+    print("6. Export Transaksi (csv)")
     print("0. Keluar")
 
 def daftar():
@@ -32,15 +32,6 @@ def masuk():
         print("❌ Login gagal.")
         return None
 
-def tampilkan_film():
-    films = booking.list_films()
-    if not films:
-        print("Belum ada film tersedia.")
-    else:
-        print("\n🎬 Daftar Film:")
-        for f in films:
-            print(f"- {f['id']}: {f['title']} ({f['schedule']})")
-
 def export_transaction_data():
     path = "Movie_Booking/data/transactions.json"
     if not os.path.exists(path):
@@ -54,64 +45,77 @@ def export_transaction_data():
         print("❌ Belum ada transaksi.")
         return
 
-    print("Export format? ", end="")
-    format = input().strip().lower()  # 
+    # Ambil hanya transaksi terakhir
+    last_transaction = transactions[-1:]
 
+    format = input("Export format? (csv): ").strip().lower()
     os.makedirs("data", exist_ok=True)
 
-    if format in ["csv", "ya"]:  #  
+    if format in ["csv", "ya"]:
         exporter = CSVExporter()
-        filename = "data/transactions_export.csv"
+        filename = "data/last_transaction_export.csv"
+        exporter.export(last_transaction, filename)
+        print("✅ Transaksi terakhir berhasil diekspor ke", filename)
     else:
         print("❌ Format tidak dikenali.")
-        return
-
-    exporter.export(transactions, filename)
-    print("✅ Transaksi berhasil diekspor ke", filename)
 
 
-
+# ==============================
+#        MAIN PROGRAM (FSM)
+# ==============================
 if __name__ == '__main__':
     user = None
     film = None
-    jadwal = None 
+    jadwal = None
+    current_state = "NOT_LOGGED_IN"  # Initial state
+
     while True:
         menu()
         choice = input("Pilih menu: ")
 
         if choice == '1':
             daftar()
-            user = None
-            continue
+            current_state = "NOT_LOGGED_IN"
+
         elif choice == '2':
             user = masuk()
+            if user:
+                current_state = "LOGGED_IN"
+            else:
+                current_state = "NOT_LOGGED_IN"
+
         elif choice == '3':
             booking.tampilkan_films()
+
         elif choice == '4':
-            if user:
+            if current_state == "LOGGED_IN":
                 film, jadwal = booking.pilih_film_dan_jadwal()
                 if film and jadwal:
-                    print(f"✅ Siap untuk lanjut pilih kursi di film '{film}' jam {jadwal}.")
+                    current_state = "FILM_SELECTED"
+                    print(f"✅ Siap lanjut pilih kursi di '{film}' jam {jadwal}.")
             else:
                 print("❌ Anda harus login terlebih dahulu.")
+
         elif choice == '5':
-            if user:
-                if film and jadwal:
-                    kursi_terpilih = booking.pilih_kursi()
-                    if kursi_terpilih:
-                        print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
-                        booking.simpan_transaksi(user, film, jadwal, kursi_terpilih)
-                    else:
-                        print("❌ Anda belum memilih kursi.")
+            if current_state == "FILM_SELECTED":
+                kursi_terpilih = booking.pilih_kursi()
+                if kursi_terpilih:
+                    print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
+                    booking.simpan_transaksi(user, film, jadwal, kursi_terpilih)
+                    current_state = "LOGGED_IN"  # Kembali ke state sebelumnya
                 else:
-                    print("❌ Silakan pilih film dan jadwal terlebih dahulu (menu 4).")
+                    print("❌ Anda belum memilih kursi.")
+            elif current_state == "LOGGED_IN":
+                print("❌ Silakan pilih film dan jadwal terlebih dahulu (menu 4).")
             else:
                 print("❌ Anda harus login terlebih dahulu.")
 
         elif choice == '6':
             export_transaction_data()
+
         elif choice == '0':
             print("👋 Keluar dari sistem. Sampai jumpa!")
             break
+
         else:
-            print("Pilihan tidak valid.")
+            print("❌ Pilihan tidak valid.")
