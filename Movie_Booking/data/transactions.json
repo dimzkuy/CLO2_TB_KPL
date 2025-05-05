@@ -14,5 +14,32 @@
         "kursi": [
             "A2"
         ]
+    },
+    {
+        "username": "admin",
+        "film": "Fast and Furious 9",
+        "jadwal": "11:00",
+        "kursi": [
+            "C3",
+            "B3"
+        ]
+    },
+    {
+        "username": "admin",
+        "film": "Fast and Furious 9",
+        "jadwal": "17:00",
+        "kursi": [
+            "A1",
+            "A2"
+        ]
+    },
+    {
+        "username": "admin",
+        "film": "Avengers: Endgame",
+        "jadwal": "15:00",
+        "kursi": [
+            "A1",
+            "A2"
+        ]
     }
 ]

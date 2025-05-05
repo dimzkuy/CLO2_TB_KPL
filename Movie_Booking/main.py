@@ -1,6 +1,5 @@
 from modules import auth, booking
 from modules.report.csv_exporter import CSVExporter
-from modules.report.pdf_exporter import PDFExporter
 import json
 import os
 
@@ -11,7 +10,7 @@ def menu():
     print("3. Tampilkan Film")
     print("4. Pilih Film dan Jadwal")
     print("5. Pilih Kursi")
-    print("6. Export Transaksi (csv/pdf)")  # Fitur baru
+    print("6. Export Transaksi (csv)")  # Fitur baru
     print("0. Keluar")
 
 def daftar():
@@ -43,7 +42,7 @@ def tampilkan_film():
             print(f"- {f['id']}: {f['title']} ({f['schedule']})")
 
 def export_transaction_data():
-    path = "data/transactions.json"
+    path = "Movie_Booking/data/transactions.json"
     if not os.path.exists(path):
         print("❌ Data transaksi tidak ditemukan.")
         return
@@ -55,23 +54,27 @@ def export_transaction_data():
         print("❌ Belum ada transaksi.")
         return
 
-    print("Export format? (csv/pdf): ", end="")
-    format = input().lower()
+    print("Export format? ", end="")
+    format = input().strip().lower()  # 
 
-    if format == "csv":
+    os.makedirs("data", exist_ok=True)
+
+    if format in ["csv", "ya"]:  #  
         exporter = CSVExporter()
         filename = "data/transactions_export.csv"
-    elif format == "pdf":
-        exporter = PDFExporter()
-        filename = "data/transactions_export.pdf"
     else:
         print("❌ Format tidak dikenali.")
         return
 
     exporter.export(transactions, filename)
+    print("✅ Transaksi berhasil diekspor ke", filename)
+
+
 
 if __name__ == '__main__':
     user = None
+    film = None
+    jadwal = None 
     while True:
         menu()
         choice = input("Pilih menu: ")
@@ -93,13 +96,18 @@ if __name__ == '__main__':
                 print("❌ Anda harus login terlebih dahulu.")
         elif choice == '5':
             if user:
-                kursi_terpilih = booking.pilih_kursi()
-                if kursi_terpilih:
-                    print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
+                if film and jadwal:
+                    kursi_terpilih = booking.pilih_kursi()
+                    if kursi_terpilih:
+                        print(f"✅ Anda memilih kursi: {', '.join(kursi_terpilih)}")
+                        booking.simpan_transaksi(user, film, jadwal, kursi_terpilih)
+                    else:
+                        print("❌ Anda belum memilih kursi.")
                 else:
-                    print("❌ Anda belum memilih kursi.")
+                    print("❌ Silakan pilih film dan jadwal terlebih dahulu (menu 4).")
             else:
                 print("❌ Anda harus login terlebih dahulu.")
+
         elif choice == '6':
             export_transaction_data()
         elif choice == '0':
